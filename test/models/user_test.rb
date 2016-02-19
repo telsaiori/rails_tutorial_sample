@@ -31,11 +31,11 @@ class UserTest < ActiveSupport::TestCase
   end
   
   test "email validation should accept valid addresses" do
-    valid_addresses = %w[user@example,com user_at_foo.org user.name@example.
-                           foo@bar_baz.com foo@bar+baz.com foo@bar..com]
+    valid_addresses = %w[user@example.com USER@foo.COM A_US-ER@foo.bar.org
+                         first.last@foo.jp alice+bob@baz.cn]
     valid_addresses.each do |valid_address|
       @user.email = valid_address
-      assert_not @user.valid?, "#{valid_address.inspect} should be valid"
+      assert @user.valid?, "#{valid_address.inspect} should be valid"
     end
   end
   
@@ -62,7 +62,9 @@ class UserTest < ActiveSupport::TestCase
     @user.password = @user.password_confirmation = "a" * 5
   end
   
-      
+  test "authenticated? should return false for a user with nil digest" do
+    assert_not @user.authenticated?('')
+  end
   
 
 end
